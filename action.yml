@@ -1,0 +1,50 @@
+name: vbump
+
+description: Bump semantic versions in JSON manifests and expose the result as an action output.
+
+inputs:
+  bump:
+    description: Release type to apply (major, minor, patch, premajor, preminor, prepatch, prerelease, none).
+    required: false
+    default: patch
+  file:
+    description: Path to the JSON file containing a top-level "version" field.
+    required: false
+    default: package.json
+  preid:
+    description: Prerelease identifier used by premajor, preminor, prepatch and prerelease bumps.
+    required: false
+    default: ''
+  dry-run:
+    description: When true, compute the next version without writing the file.
+    required: false
+    default: 'false'
+
+outputs:
+  version:
+    description: The resulting version in vX.Y.Z form.
+    value: ${{ steps.vbump.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - id: vbump
+      name: Run vbump
+      shell: bash
+      run: |
+        set -euo pipefail
+        args=("${{ inputs.bump }}" --file "${{ inputs.file }}" --json)
+        if [ -n "${{ inputs.preid }}" ]; then
+          args+=(--preid "${{ inputs.preid }}")
+        fi
+        if [ "${{ inputs.dry-run }}" = "true" ]; then
+          args+=(--dry-run)
+        fi
+        result="$(node "${{ github.action_path }}/bin/vbump.js" "${args[@]}")"
+        echo "$result"
+        new_version="$(node -e 'process.stdout.write(JSON.parse(process.argv[1]).newVersion)' "$result")"
+        echo "version=v${new_version}" >> "$GITHUB_OUTPUT"
+
+branding:
+  icon: tag
+  color: blue

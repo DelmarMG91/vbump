@@ -1,0 +1,40 @@
+{
+  "name": "vbump",
+  "version": "0.1.0",
+  "description": "Semantic version bump CLI and GitHub Action",
+  "type": "module",
+  "bin": {
+    "vbump": "bin/vbump.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "files": [
+    "bin",
+    "src",
+    "action.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "semver",
+    "semantic-version",
+    "version",
+    "bump",
+    "cli",
+    "github-action"
+  ],
+  "author": "DelmarMG91",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DelmarMG91/vbump.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DelmarMG91/vbump/issues"
+  },
+  "homepage": "https://github.com/DelmarMG91/vbump#readme"
+}
